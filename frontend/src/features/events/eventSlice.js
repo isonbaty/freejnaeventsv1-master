@@ -10,6 +10,23 @@ const initialState = {
   message: '',
 };
 
+export const getEvents = createAsyncThunk(
+  'events/getall',
+  async (_, thunkAPI) => {
+    try {
+      return await eventService.getEvents();
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const eventSlice = createSlice({
   name: 'event',
   initialState,
