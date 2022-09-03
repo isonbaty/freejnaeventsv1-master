@@ -1,27 +1,47 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getEvents, reset } from '../features/events/eventSlice';
+import { getAllEvents, reset } from '../features/events/eventSlice';
 import { useEffect } from 'react';
 import Spinner from '../components/Spinner';
 import BackButton from '../components/BackButton';
+import EventItem from '../components/EventItem';
 
 function AllEvents() {
   const dispatch = useDispatch();
-  const events = useSelector((state) => state.event); // Get events from Redux store
+  const { events, isLoading, isError, isSuccess } = useSelector(
+    (state) => state.event
+  ); // Get events from Redux store
 
   useEffect(() => {
     return () => {
-      dispatch(reset());
+      if (isSuccess) {
+        dispatch(reset());
+      }
     };
-  }, [dispatch]); // Run when events change
+  }, [dispatch, isSuccess]); // Run when events change
 
   useEffect(() => {
-    dispatch(getEvents()); // Get events from backend
-  }, []);
+    dispatch(getAllEvents()); // Get events from backend
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
-    <div>
+    <>
       <BackButton url='/' />
       <h1>All Events</h1>
-    </div>
+      <div className='ticket'>
+        <div className='ticket-heading'>
+          <div>date</div>
+          <div>Product</div>
+          <div>status</div>
+          <div></div>
+        </div>
+        {events.map((event) => (
+          <EventItem key={event._id} event={event} />
+        ))}
+      </div>
+    </>
   );
 }
 

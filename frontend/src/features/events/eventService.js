@@ -15,18 +15,19 @@ const createEvent = async (eventData, token) => {
 
 // get all events
 
-const getEvents = async (token) => {
+const getAllEvents = async (token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(API_URL);
+  const response = await axios.get(API_URL, config);
   return response.data;
 };
+
 const eventService = {
   createEvent,
-  getEvents,
+  getAllEvents,
 };
 
 export default eventService;
