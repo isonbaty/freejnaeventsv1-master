@@ -30,13 +30,12 @@ function AllEvents() {
     <>
       <BackButton url='/' />
       <h1>All Events</h1>
-      <div className='ticket'>
-        <div className='ticket-heading'>
-          <div>date</div>
-          <div>Product</div>
-          <div>status</div>
-          <div></div>
-        </div>
+      <div className='ticket-headings'>
+        <div>date</div>
+        <div>Title</div>
+        <div>status</div>
+      </div>
+      <div className='tickets'>
         {events.map((event) => (
           <EventItem key={event._id} event={event} />
         ))}
