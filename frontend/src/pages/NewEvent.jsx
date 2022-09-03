@@ -1,34 +1,60 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { createEvent, reset } from '../features/events/eventSlice';
+import Spinner from '../components/Spinner';
 
 function NewEvent() {
   const { user } = useSelector((state) => state.auth);
+  const { isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.event
+  );
+
   const [createdBy] = useState(user._id);
-  const [name] = useState(user.name);
-  const [title, setTitle] = useState('');
+  const [userName] = useState(user.name);
+  const [name, setName] = useState('');
   const [desc, setDesc] = useState('');
   const [date, setDate] = useState('');
   const [status, setStatus] = useState('upcoming');
   const [venue, setVenue] = useState('');
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    if (isSuccess) {
+      dispatch(reset());
+      navigate('/events');
+    }
+    dispatch(reset());
+  }, [dispatch, isError, isSuccess, message, navigate]);
+
   const onSubmit = (e) => {
     e.preventDefault();
+    dispatch(createEvent({ createdBy, name, desc, date, status, venue }));
   };
   if (!user.isAdmin) {
     return <h1>Not Authorized</h1>;
+  }
+  if (isLoading) {
+    return <Spinner />;
   }
 
   return (
     <>
       <section className='heading'>
-        <p>Hello {name}</p>
+        <p>Hello {userName}</p>
         <h1> Create New Event</h1>
         <p>Please fill out the form </p>
       </section>
       <section className='form'>
         <div className='form-group'>
           <label htmlFor=''>Admin Name</label>
-          <input type='text' value={name} disabled />
+          <input type='text' value={userName} disabled />
         </div>
         <div className='form-group'>
           <label htmlFor=''>Admin ID</label>
@@ -38,11 +64,11 @@ function NewEvent() {
           <div className='form-group'>
             <input
               type='text'
-              value={title}
-              name='title'
-              id='title'
+              value={name}
+              name='name'
+              id='name'
               required
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               placeholder='Event Title'
             />
           </div>

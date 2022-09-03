@@ -9,6 +9,12 @@ function AllEvents() {
   const events = useSelector((state) => state.event); // Get events from Redux store
 
   useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]); // Run when events change
+
+  useEffect(() => {
     dispatch(getEvents()); // Get events from backend
   }, []);
   return (
