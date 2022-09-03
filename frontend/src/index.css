@@ -230,26 +230,26 @@ h3 {
   background-color: #333;
   color: #fff;
   width: 100px;
-  padding: 0 20px;
+  padding: 5px 20px 20 5px;
   justify-self: center;
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 16px;
   text-align: center;
 }
 
-.status-new {
+.status-upcoming {
   background-color: green;
   color: #fff;
   border-radius: 10px;
 }
 
-.status-open {
+.status-pending {
   background-color: steelblue;
   color: #fff;
   border-radius: 10px;
 }
 
-.status-closed {
+.status-finished {
   background-color: darkred;
   color: #fff;
   border-radius: 10px;
